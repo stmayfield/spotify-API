@@ -59,11 +59,7 @@ renderTrackList(testTrackList);
 
 getArtist();
 
-var authButton = $("#widget").append($("<button>").html("Allow Access"));
-authButton.click(function () {
-    // window.location.href = authEndpoint + clientID + "&redirect_uri=" + redirectURI + '&response_type=token';
-    loadWidget()
-})
+
 
 
 var authEndpoint = 'https://accounts.spotify.com/authorize?client_id=';
@@ -74,7 +70,11 @@ let accessToken
 var URI = "0Hoc8rluBkPaXu9pQAq1x6"
 var queryURL = "https://api.spotify.com/v1/search/q=" + artist + "&type=artist"
 
-
+var authButton = $("#widget").append($("<button>").html("Allow Access"));
+authButton.click(function () {
+    window.location.href = authEndpoint + clientID + "&redirect_uri=" + redirectURI + '&response_type=token';
+    loadWidget()
+})
 
 /*
 'https://accounts.spotify.com/authorize?client_id=87da17f3514b4a86854820f3d7804bb0&redirect_uri=https://stmayfield.github.io/spotify-API/&response_type=token'
@@ -102,7 +102,7 @@ const scopes = [
 ];
 
 if (!_token) {
-    window.location = `${authEndpoint}?client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
+    window.location = authEndpoint + clientID + "&redirect_uri=" + redirectURI + '&response_type=token';
 }
 
 // Spotify API
@@ -116,17 +116,15 @@ function loadWidget() {
             console.log(response)
             var artistID = response.artists.items[0].id
             var queryURL2 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
-            function ajax2() {
-                $.ajax({
-                    url: queryURL2,
-                    method: "GET",
-                    Accept: "application/json",
-                    success: function (response) {
-                        console.log(response)
-                        iFrameW();
-                    }
-                })
-            }
+            $.ajax({
+                url: queryURL2,
+                method: "GET",
+                Accept: "application/json",
+                success: function (response) {
+                    console.log(response)
+                    iFrameW();
+                }
+            })
         }
 
 
