@@ -67,26 +67,72 @@ var redirectURI = "https:%2F%2Fstmayfield.github.io%2Fspotify-API%2F"
 var artist = /*$("#newItem").val()*/ "taylor swift";
 
 
-
-
-
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
 authButton.click(function () {
     window.location.href = authEndpoint + clientID + "&redirect_uri=" + redirectURI + '&response_type=token';
 })
 
-
+/*
 'https://accounts.spotify.com/authorize?client_id=87da17f3514b4a86854820f3d7804bb0&redirect_uri=https://stmayfield.github.io/spotify-API/&response_type=token'
 'https://accounts.spotify.com/authorize?client_id=5fe01282e94241328a84e7c5cc169164&redirect_uri=http:%2F%2Fexample.com%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123'
+*/
 
 
+
+
+
+// Event Trigger for Spotify Auth
+
+
+
+
+
+
+// Spotify Authorization Token 
+let accessToken
 var queryURL = "https://api.spotify.com/v1/search/q=" + artist + "&type=artist"
+
+var artist = $("#newItem").val();
+const hash = window.location.hash
+    .substring(1)
+    .split('&')
+    .reduce(function (initial, item) {
+        if (item) {
+            var parts = item.split('=');
+            initial[parts[0]] = decodeURIComponent(parts[1]);
+        }
+        return initial;
+    }, {});
+window.location.hash = '';
+
+let _token = hash.access_token;
+
+const scopes = [
+    'user-read-private',
+    'user-read-email'
+];
+
+if (!_token) {
+    window.location = `${authEndpoint}?client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
+}
+
+
+
+// Event Trigger for Spotify Auth
+
+// var authButton = $("#widget").append($("<button>").html("Allow Access"));
+// authButton.click(function () {
+//     buildAuthLink();
+// })
+
 
 // Spotify API
 $.ajax({
     url: queryURL,
     method: "GET",
     Accept: "application/json",
+    Authorization: "Bearer " + authToken,
+    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
     success: function (response) {
         console.log(response)
         var artistID = response.artists.items[0].id
@@ -103,23 +149,12 @@ $.ajax({
             })
         }
         ajax2()
-
     }
 })
-
-
-
-
-// Event Trigger for Spotify Auth
-
-
-
-
 
 // var URI = "6mswcNfl5UULnG5fvg5Fty?si=i2tgZLkeRQeZSAInNvm_ew"
 
 // Spotify Widget
-
 function iFrameW() {
     $("#widget").empty();
     var iFrameW = $("<iframe>").attr({
