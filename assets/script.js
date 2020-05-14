@@ -61,6 +61,25 @@ renderTrackList(testTrackList);
 getArtist();
 
 
+var authEndpoint = 'https://accounts.spotify.com/authorize?client_id=';
+var clientID = "87da17f3514b4a86854820f3d7804bb0"
+var redirectURI = "https:%2F%2Fstmayfield.github.io%2Fspotify-API%2F"
+
+
+
+
+
+var authButton = $("#widget").append($("<button>").html("Allow Access"));
+authButton.click(function () {
+    window.location.href = authEndpoint + clientID + "&redirect_uri=" + redirectURI + '&response_type=token';
+})
+
+
+'https://accounts.spotify.com/authorize?client_id=87da17f3514b4a86854820f3d7804bb0&redirect_uri=https://stmayfield.github.io/spotify-API/&response_type=token'
+'https://accounts.spotify.com/authorize?client_id=5fe01282e94241328a84e7c5cc169164&redirect_uri=http:%2F%2Fexample.com%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123'
+
+
+
 // Spotify Authorization Token 
 let accessToken
 var URI = "0Hoc8rluBkPaXu9pQAq1x6"
@@ -83,9 +102,6 @@ function buildAuthLink() {
 
     let _token = hash.access_token;
 
-    const authEndpoint = 'https://accounts.spotify.com/authorize';
-    const clientID = "87da17f3514b4a86854820f3d7804bb0"
-    const redirectURI = "https://stmayfield.github.io/spotify-API/"
     const scopes = [
         'user-read-private',
         'user-read-email'
@@ -112,10 +128,7 @@ function buildAuthLink() {
 
 // Event Trigger for Spotify Auth
 
-var authButton = $("#widget").append($("<button>").html("Allow Access"));
-authButton.click(function () {
-    buildAuthLink();
-})
+
 
 
 
