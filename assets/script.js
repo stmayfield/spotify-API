@@ -130,19 +130,19 @@ function loadWidget() {
         }
 
 
-// }
+    })
 
-
+}
 
 function iFrameW() {
-        $("#widget").empty();
-        var iFrameW = $("<iframe>").attr({
-            src: "https://open.spotify.com/embed/track/" + URI,
-            width: "300",
-            height: "80",
-            frameborder: "0",
-            allowtransparency: "true",
-            allow: "encrypted-media"
-        })
+    $("#widget").empty();
+    var iFrameW = $("<iframe>").attr({
+        src: "https://open.spotify.com/embed/track/" + URI,
+        width: "300",
+        height: "80",
+        frameborder: "0",
+        allowtransparency: "true",
+        allow: "encrypted-media"
+    })
     $("#widget").append(iFrameW)
-    }
+}
