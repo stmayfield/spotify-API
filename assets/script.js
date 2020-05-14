@@ -74,20 +74,17 @@ authButton.click(function () {
     window.location.href = authEndpoint + clientID + "&redirect_uri=" + redirectURI + '&response_type=token';
 })
 
-
+/*
 'https://accounts.spotify.com/authorize?client_id=87da17f3514b4a86854820f3d7804bb0&redirect_uri=https://stmayfield.github.io/spotify-API/&response_type=token'
 'https://accounts.spotify.com/authorize?client_id=5fe01282e94241328a84e7c5cc169164&redirect_uri=http:%2F%2Fexample.com%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123'
-
+*/
 
 
 // Spotify Authorization Token 
 let accessToken
-var URI = "0Hoc8rluBkPaXu9pQAq1x6"
-var authToken = "BQCNHtSVriShcFxlJpG-stAvmPbF-aMmLKkoyq9F0EqeIVHHiBgElaxU5Tvb2WmgqBQfxlgXUbDfjrHN-OsiUXCiysFRL1dCMDckpJqaJxcdcovSu_ifSBiE0DsJxfz5YyvU1_Rr3skHgFjZV07vnAa0WcIF3Ss"
-const queryURL = "https://api.spotify.com/v1/search?q=taylor%20swift&type=artist"
-
+var artist = "Taylor Swift"/* $("#newItem").val()*/
+var queryURL = "https://api.spotify.com/v1/search/q=" + artist + "&type=artist"
 function buildAuthLink() {
-    var artist = $("#newItem").val();
     const hash = window.location.hash
         .substring(1)
         .split('&')
@@ -111,20 +108,20 @@ function buildAuthLink() {
         window.location = `${authEndpoint}?client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
     }
 
-    // Spotify API
-    $.ajax({
-        url: queryURL,
-        method: "GET",
-        Accept: "application/json",
-        Authorization: "Bearer " + authToken,
-        beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
-        success: function (response) {
-            console.log(response)
-            iFrameW();
-        }
-    })
-
 }
+
+// Spotify API
+$.ajax({
+    url: queryURL,
+    method: "GET",
+    Accept: "application/json",
+    Authorization: "Bearer " + authToken,
+    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+    success: function (response) {
+        console.log(response)
+        iFrameW();
+    }
+})
 
 // Event Trigger for Spotify Auth
 
