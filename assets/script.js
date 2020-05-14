@@ -91,17 +91,18 @@ $.ajax({
         console.log(response)
         var artistID = response.artists.items[0].id
         var queryURL2 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
-
-        $.ajax({
-            url: queryURL2,
-            method: "GET",
-            Accept: "application/json",
-            success: function (response) {
-                console.log(response)
-                iFrameW();
-            }
-        })
-
+        function ajax2() {
+            $.ajax({
+                url: queryURL2,
+                method: "GET",
+                Accept: "application/json",
+                success: function (response) {
+                    console.log(response)
+                    iFrameW();
+                }
+            })
+        }
+        ajax2()
 
     }
 })
