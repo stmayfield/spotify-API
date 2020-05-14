@@ -61,8 +61,8 @@ getArtist();
 
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
 authButton.click(function () {
-    window.location.href = authEndpoint + clientID + "&redirect_uri=" + redirectURI + '&response_type=token';
-    buildAuthLink()
+    // window.location.href = authEndpoint + clientID + "&redirect_uri=" + redirectURI + '&response_type=token';
+    loadWidget()
 })
 
 
@@ -72,7 +72,6 @@ var redirectURI = "https:%2F%2Fstmayfield.github.io%2Fspotify-API%2F"
 var artist = /*$("#newItem").val()*/ "taylor swift";
 let accessToken
 var URI = "0Hoc8rluBkPaXu9pQAq1x6"
-var authToken = "BQCNHtSVriShcFxlJpG-stAvmPbF-aMmLKkoyq9F0EqeIVHHiBgElaxU5Tvb2WmgqBQfxlgXUbDfjrHN-OsiUXCiysFRL1dCMDckpJqaJxcdcovSu_ifSBiE0DsJxfz5YyvU1_Rr3skHgFjZV07vnAa0WcIF3Ss"
 var queryURL = "https://api.spotify.com/v1/search/q=" + artist + "&type=artist"
 
 
@@ -83,33 +82,31 @@ var queryURL = "https://api.spotify.com/v1/search/q=" + artist + "&type=artist"
 */
 
 
-function buildAuthLink() {
-    const hash = window.location.hash
-        .substring(1)
-        .split('&')
-        .reduce(function (initial, item) {
-            if (item) {
-                var parts = item.split('=');
-                initial[parts[0]] = decodeURIComponent(parts[1]);
-            }
-            return initial;
-        }, {});
-    window.location.hash = '';
+// function buildAuthLink() {
+const hash = window.location.hash
+    .substring(1)
+    .split('&')
+    .reduce(function (initial, item) {
+        if (item) {
+            var parts = item.split('=');
+            initial[parts[0]] = decodeURIComponent(parts[1]);
+        }
+        return initial;
+    }, {});
+window.location.hash = '';
 
-    let _token = hash.access_token;
-    const authEndpoint = 'https://accounts.spotify.com/authorize';
-    const clientID = "87da17f3514b4a86854820f3d7804bb0"
-    const redirectURI = "https://stmayfield.github.io/spotify-API/"
-    const scopes = [
-        'user-read-private',
-        'user-read-email'
-    ];
+let _token = hash.access_token;
+const scopes = [
+    'user-read-private',
+    'user-read-email'
+];
 
-    if (!_token) {
-        window.location = `${authEndpoint}?client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
-    }
+if (!_token) {
+    window.location = `${authEndpoint}?client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
+}
 
-    // Spotify API
+// Spotify API
+function loadWidget() {
     $.ajax({
         url: queryURL,
         method: "GET",
@@ -117,11 +114,23 @@ function buildAuthLink() {
         beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
         success: function (response) {
             console.log(response)
-            iFrameW();
-        }
+            var artistID = response.artists.items[0].id
+            var queryURL2 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
+            function ajax2() {
+                $.ajax({
+                    url: queryURL2,
+                    method: "GET",
+                    Accept: "application/json",
+                    success: function (response) {
+                        console.log(response)
+                        iFrameW();
+                    }
+                }
     })
-
 }
+
+
+// }
 
 
 
