@@ -89,7 +89,7 @@ function buildAuthLink() {
 
     const authEndpoint = 'https://accounts.spotify.com/authorize';
     const clientID = "87da17f3514b4a86854820f3d7804bb0"
-    const redirectURI = "https://gfhiebert.github.io/Music-Buffet/"
+    const redirectURI = "https://stmayfield.github.io/spotify-API/"
     const scopes = [
         'user-read-private',
         'user-read-email'
