@@ -67,44 +67,33 @@ var URI = "0Hoc8rluBkPaXu9pQAq1x6"
 var authToken = "BQCNHtSVriShcFxlJpG-stAvmPbF-aMmLKkoyq9F0EqeIVHHiBgElaxU5Tvb2WmgqBQfxlgXUbDfjrHN-OsiUXCiysFRL1dCMDckpJqaJxcdcovSu_ifSBiE0DsJxfz5YyvU1_Rr3skHgFjZV07vnAa0WcIF3Ss"
 const queryURL = "https://api.spotify.com/v1/search?q=taylor%20swift&type=artist"
 
-function buildAuthLink() {
-    var artist = $("#newItem").val();
-    const hash = window.location.hash
-        .substring(1)
-        .split('&')
-        .reduce(function (initial, item) {
-            if (item) {
-                var parts = item.split('=');
-                initial[parts[0]] = decodeURIComponent(parts[1]);
-            }
-            return initial;
-        }, {});
-    window.location.hash = '';
+// function buildAuthLink() {
+var artist = $("#newItem").val();
+const hash = window.location.hash
+    .substring(1)
+    .split('&')
+    .reduce(function (initial, item) {
+        if (item) {
+            var parts = item.split('=');
+            initial[parts[0]] = decodeURIComponent(parts[1]);
+        }
+        return initial;
+    }, {});
+window.location.hash = '';
 
-    let _token = hash.access_token;
+let _token = hash.access_token;
 
-    const authEndpoint = 'https://accounts.spotify.com/authorize';
-    const clientID = "87da17f3514b4a86854820f3d7804bb0"
-    const redirectURI = "https://stmayfield.github.io/spotify-API/"
-    const scopes = [
-        'user-read-private',
-        'user-read-email'
-    ];
+const authEndpoint = 'https://accounts.spotify.com/authorize';
+const clientID = "87da17f3514b4a86854820f3d7804bb0"
+const redirectURI = "https://stmayfield.github.io/spotify-API/"
+const scopes = [
+    'user-read-private',
+    'user-read-email'
+];
 
-    if (!_token) {
-        window.location = `${authEndpoint}?client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
-    }
-
-
+if (!_token) {
+    window.location = `${authEndpoint}?client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
 }
-
-// Event Trigger for Spotify Auth
-
-var authButton = $("#widget").append($("<button>").html("Allow Access"));
-authButton.click(function () {
-    buildAuthLink();
-})
-
 
 // Spotify API
 $.ajax({
@@ -117,6 +106,17 @@ $.ajax({
         console.log(response)
     }
 })
+
+// }
+
+// Event Trigger for Spotify Auth
+
+var authButton = $("#widget").append($("<button>").html("Allow Access"));
+authButton.click(function () {
+    buildAuthLink();
+})
+
+
 
 // var URI = "6mswcNfl5UULnG5fvg5Fty?si=i2tgZLkeRQeZSAInNvm_ew"
 
