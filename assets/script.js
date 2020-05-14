@@ -67,10 +67,6 @@ var URI = "0Hoc8rluBkPaXu9pQAq1x6"
 var authToken = "BQCNHtSVriShcFxlJpG-stAvmPbF-aMmLKkoyq9F0EqeIVHHiBgElaxU5Tvb2WmgqBQfxlgXUbDfjrHN-OsiUXCiysFRL1dCMDckpJqaJxcdcovSu_ifSBiE0DsJxfz5YyvU1_Rr3skHgFjZV07vnAa0WcIF3Ss"
 const queryURL = "https://api.spotify.com/v1/search?q=taylor%20swift&type=artist"
 
-
-
-
-
 function buildAuthLink() {
     var artist = $("#newItem").val();
     const hash = window.location.hash
@@ -116,7 +112,7 @@ $.ajax({
     method: "GET",
     Accept: "application/json",
     Authorization: "Bearer " + authToken,
-    // beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
     success: function (response) {
         console.log(response)
     }
