@@ -1,4 +1,4 @@
-# Music Buffet
+# Spotify API Environment
 
 Summary here
 
@@ -12,7 +12,7 @@ Summary here
 
 The following will be submitted for review:
 
-* [Github.io: Deployed Application](https://GFHiebert.github.io/Music-Buffet/)
+* [Github.io: Deployed Application](https://stmayfield.github.io/spotify-API/)
 
 * [Github.com: Repository](https://github.com/GFHiebert/Music-Buffet)
 
