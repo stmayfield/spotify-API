@@ -64,6 +64,7 @@ getArtist();
 var authEndpoint = 'https://accounts.spotify.com/authorize?client_id=';
 var clientID = "87da17f3514b4a86854820f3d7804bb0"
 var redirectURI = "https:%2F%2Fstmayfield.github.io%2Fspotify-API%2F"
+var artist = /*$("#newItem").val()*/ "taylor swift";
 
 
 
@@ -79,52 +80,20 @@ authButton.click(function () {
 'https://accounts.spotify.com/authorize?client_id=5fe01282e94241328a84e7c5cc169164&redirect_uri=http:%2F%2Fexample.com%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123'
 
 
+var queryURL = "https://api.spotify.com/v1/search/q=" + artist + "&type=artist"
 
-// Spotify Authorization Token 
-let accessToken
-var URI = "0Hoc8rluBkPaXu9pQAq1x6"
-var authToken = "BQCNHtSVriShcFxlJpG-stAvmPbF-aMmLKkoyq9F0EqeIVHHiBgElaxU5Tvb2WmgqBQfxlgXUbDfjrHN-OsiUXCiysFRL1dCMDckpJqaJxcdcovSu_ifSBiE0DsJxfz5YyvU1_Rr3skHgFjZV07vnAa0WcIF3Ss"
-const queryURL = "https://api.spotify.com/v1/search?q=taylor%20swift&type=artist"
-
-function buildAuthLink() {
-    var artist = $("#newItem").val();
-    const hash = window.location.hash
-        .substring(1)
-        .split('&')
-        .reduce(function (initial, item) {
-            if (item) {
-                var parts = item.split('=');
-                initial[parts[0]] = decodeURIComponent(parts[1]);
-            }
-            return initial;
-        }, {});
-    window.location.hash = '';
-
-    let _token = hash.access_token;
-
-    const scopes = [
-        'user-read-private',
-        'user-read-email'
-    ];
-
-    if (!_token) {
-        window.location = `${authEndpoint}?client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
+// Spotify API
+$.ajax({
+    url: queryURL,
+    method: "GET",
+    Accept: "application/json",
+    success: function (response) {
+        console.log(response)
+        iFrameW();
     }
+})
 
-    // Spotify API
-    $.ajax({
-        url: queryURL,
-        method: "GET",
-        Accept: "application/json",
-        Authorization: "Bearer " + authToken,
-        beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
-        success: function (response) {
-            console.log(response)
-            iFrameW();
-        }
-    })
 
-}
 
 // Event Trigger for Spotify Auth
 
