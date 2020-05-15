@@ -103,31 +103,31 @@ if (!_token) {
 }
 
 
-function searchAPI() {
-    // Store recent search in localStorage
-    var artistResult = $("#newItem").val().trim();
-    var queryURL = "https://api.spotify.com/v1/search?q=" + artistResult + "&type=artist";
+function searchAPI() { };
+// Store recent search in localStorage
+var artistResult = $("#newItem").val().trim();
+var queryURL = "https://api.spotify.com/v1/search?q=" + artistResult + "&type=artist";
 
+$.ajax({
+    url: queryURL,
+    method: "GET",
+    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+}).then(function (response) {
+    var artistID = response.artists.items[0].id;
+    var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks?country=US";
+    console.log(response);
     $.ajax({
         url: queryURL,
         method: "GET",
         beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
     }).then(function (response) {
-        var artistID = response.artists.items[0].id;
-        var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks?country=US";
-        console.log(response);
-        $.ajax({
-            url: queryURL,
-            method: "GET",
-            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
-        }).then(function (response) {
-            console.log(response)
-            var songID = response.tracks[0].id
-            iFrameW(songID)
-        });
+        console.log(response)
+        var songID = response.tracks[0].id
+        iFrameW(songID)
     });
+});
 
-};
+
 
 
 
@@ -140,8 +140,7 @@ function searchAPI() {
 // Set Auth button to Discover button
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
 authButton.click(
-    searchAPI()
+    // Insert Function(s)
 );
-
 
 
