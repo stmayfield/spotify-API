@@ -149,6 +149,8 @@ const scopes = [
 if (!_token) {
     window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
 }
+
+var artistID = "06HL4z0CvFAxyc27GXpf02?si=DH8rk5BaQ0OkfcJpzSwebQ";
 var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
 
 // Make a call using the token
