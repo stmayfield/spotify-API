@@ -153,8 +153,8 @@ if (!_token) {
 }
 
 var artistID = "06HL4z0CvFAxyc27GXpf02";
-var artist = "taylor swift"
-var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks";
+var artist = "taylor swift";
+var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks?from_token";
 var queryURL2 = "https://api.spotify.com/v1/search?q=" + artist + "&type=artist";
 // var queryURL3 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks";
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
