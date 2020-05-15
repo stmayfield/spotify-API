@@ -124,7 +124,7 @@ var artistID = "06HL4z0CvFAxyc27GXpf02?si=DH8rk5BaQ0OkfcJpzSwebQ";
 
     function login(callback) {
         var clientID = "87da17f3514b4a86854820f3d7804bb0";
-        var redirectURI = "https:%2F%2Fstmayfield.github.io%2Fspotify-API%2F";
+        var redirectURI = "https://stmayfield.github.io/spotify-API/";
         function getLoginURL(scopes) {
             return 'https://accounts.spotify.com/authorize?client_id=' + clientID +
                 '&redirect_uri=' + encodeURIComponent(redirectURI) +
