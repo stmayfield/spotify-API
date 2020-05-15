@@ -58,12 +58,16 @@ var testTrackList = [
 renderTrackList(testTrackList);
 
 getArtist();
+
 /*
 var authEndpoint = 'https://accounts.spotify.com/authorize?client_id=';
 var artist = "taylor swift";
 var artistID = "06HL4z0CvFAxyc27GXpf02?si=DH8rk5BaQ0OkfcJpzSwebQ";
+var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
+var redirectURI = "https://stmayfield.github.io/spotify-API/";
 
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
+*/
 
 /*
 'https://accounts.spotify.com/authorize?client_id=87da17f3514b4a86854820f3d7804bb0&redirect_uri=https://stmayfield.github.io/spotify-API/&response_type=token'
@@ -72,13 +76,13 @@ var authButton = $("#widget").append($("<button>").html("Allow Access"));
 /*
 function loginAuth(callback) {
     var clientID = "87da17f3514b4a86854820f3d7804bb0";
-    var redirectURI = "https:%2F%2Fstmayfield.github.io%2Fspotify-API%2F";
+    var redirectURI = "https://stmayfield.github.io/spotify-API/";
     var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
     return authEndpoint + clientID + "&redirect_uri=" + redirectURI + '&response_type=token';
 
 }
 
-/*
+
 // Spotify API
 function spotifyAPI(accessToken) {
     return $.ajax({
@@ -98,7 +102,7 @@ authButton.click(function () {
             })
     })
 })
-
+*/
 
 
 
@@ -114,67 +118,48 @@ function iFrameW() {
     })
     $("#widget").append(iFrameW)
 };
-*/
-
-var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
-var artistID = "06HL4z0CvFAxyc27GXpf02?si=DH8rk5BaQ0OkfcJpzSwebQ";
 
 
-(function () {
 
-    function login(callback) {
-        var clientID = "87da17f3514b4a86854820f3d7804bb0";
-        var redirectURI = "https://stmayfield.github.io/spotify-API/";
-        function getLoginURL(scopes) {
-            return 'https://accounts.spotify.com/authorize?client_id=' + clientID +
-                '&redirect_uri=' + encodeURIComponent(redirectURI) +
-                '&scope=' + encodeURIComponent(scopes.join(' ')) +
-                '&response_type=token';
+// Get the hash of the url
+const hash = window.location.hash
+    .substring(1)
+    .split('&')
+    .reduce(function (initial, item) {
+        if (item) {
+            var parts = item.split('=');
+            initial[parts[0]] = decodeURIComponent(parts[1]);
         }
+        return initial;
+    }, {});
+window.location.hash = '';
 
-        var url = getLoginURL([
-            'user-read-email'
-        ]);
+// Set token
+let _token = hash.access_token;
 
-        var width = 450,
-            height = 730,
-            left = (screen.width / 2) - (width / 2),
-            top = (screen.height / 2) - (height / 2);
+const authEndpoint = 'https://accounts.spotify.com/authorize';
 
-        window.addEventListener("message", function (event) {
-            var hash = JSON.parse(event.data);
-            if (hash.type == 'access_token') {
-                callback(hash.access_token);
-            }
-        }, false);
+// Replace with your app's client ID, redirect URI and desired scopes
+const clientId = '87da17f3514b4a86854820f3d7804bb0';
+const redirectUri = 'https://stmayfield.github.io/spotify-API/';
+const scopes = [
+    'user-top-read'
+];
 
-        var w = window.open(url,
-            'Spotify',
-            'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
-        );
+// If there is no token, redirect to Spotify authorization
+if (!_token) {
+    window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
+}
 
-    }
-
-    function getUserData(accessToken) {
-        return $.ajax({
-            url: queryURL,
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            }
-        });
-    }
+// Make a call using the token
+$.ajax({
+    url: queryURL,
+    method: "GET",
+    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+}).then(function (response) {
+    // Do something with the returned data
+    console.log(response)
+    iFrameW()
+});
 
 
-    authButton = $("#widget").append($("<button>").html("Allow Access"));
-
-    authButton.click(function () {
-        login(function (accessToken) {
-            getUserData(accessToken)
-                .then(function (response) {
-                    loginButton.style.display = 'none';
-                    resultsPlaceholder.innerHTML = template(response);
-                });
-        });
-    });
-
-})();
