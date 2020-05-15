@@ -76,6 +76,7 @@ function iFrameW(URI) {
 };
 
 
+// Set Auth button to Discover button
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
 authButton.click(function () {
     const hash = window.location.hash
@@ -93,13 +94,14 @@ authButton.click(function () {
     let _token = hash.access_token;
     var authEndpoint = "https://accounts.spotify.com/authorize";
     var clientID = "87da17f3514b4a86854820f3d7804bb0";
+    // Set new URI to Live Site
     var redirectURI = "https://stmayfield.github.io/spotify-API/";
     var scope = [
         "user-top-read"
     ];
 
     if (!_token) {
-        window.location = authEndpoint + "?client_id=" + clientID + "&redirect_uri" + redirectURI + "&scope=" + scope.join("%20") + "&response_type=token&show_dialog=true";
+        window.location = authEndpoint + "?client_id=" + clientID + "&redirect_uri=" + redirectURI + "&scope=" + scope.join("%20") + "&response_type=token&show_dialog=true";
     }
 
 
