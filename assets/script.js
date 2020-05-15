@@ -63,7 +63,6 @@ getArtist();
 var authEndpoint = 'https://accounts.spotify.com/authorize?client_id=';
 var artist = "taylor swift";
 var artistID = "06HL4z0CvFAxyc27GXpf02?si=DH8rk5BaQ0OkfcJpzSwebQ";
-var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
 var redirectURI = "https://stmayfield.github.io/spotify-API/";
 
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
@@ -150,6 +149,7 @@ const scopes = [
 if (!_token) {
     window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
 }
+var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
 
 // Make a call using the token
 $.ajax({
