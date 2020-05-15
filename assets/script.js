@@ -152,6 +152,10 @@ if (!_token) {
     window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
 }
 
+var artistID = "06HL4z0CvFAxyc27GXpf02";
+var artist = "taylor swift";
+var queryURL2 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks?from_token";
+var queryURL = "https://api.spotify.com/v1/search?q=" + artist + "&type=artist";
 // var queryURL3 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks";
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
 
@@ -159,12 +163,16 @@ var authButton = $("#widget").append($("<button>").html("Allow Access"));
 
 
 // Make a call using the token
-
+$.ajax({
+    url: queryURL,
+    method: "GET",
+    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+}).then(function (response) {
+    // Do something with the returned data
+    console.log(response)
+});
 
 // Make a call using the token
-var artist = "taylor swift";
-var queryURL2 = "https://api.spotify.com/v1/search?q=" + artist + "&type=artist";
-
 $.ajax({
     url: queryURL2,
     method: "GET",
@@ -172,19 +180,6 @@ $.ajax({
 }).then(function (response) {
     // Do something with the returned data
     console.log(response)
-    var artistID = "06HL4z0CvFAxyc27GXpf02";
-    var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks?from_token";
-
-    $.ajax({
-        url: queryURL,
-        method: "GET",
-        beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
-    }).then(function (response) {
-        // Do something with the returned data
-        console.log(response)
-    });
-
-
 });
 /*
 // Make a call using the token
