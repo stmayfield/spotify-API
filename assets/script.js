@@ -140,9 +140,6 @@ function searchAPI() {
 // Set Auth button to Discover button
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
 authButton.click(
-    authenticateLoad()
-);
-authButton.click(
     searchAPI()
 );
 
