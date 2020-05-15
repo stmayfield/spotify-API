@@ -151,7 +151,7 @@ if (!_token) {
 }
 
 var artistID = "06HL4z0CvFAxyc27GXpf02?si=DH8rk5BaQ0OkfcJpzSwebQ";
-var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
+var queryURL = `https://api.spotify.com/v1/artists/${artistID}/top-tracks`
 
 // Make a call using the token
 $.ajax({
