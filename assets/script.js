@@ -178,6 +178,7 @@ $.ajax({
     $.ajax({
         url: queryURL,
         method: "GET",
+        beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
     }).then(function (response) {
         // Do something with the returned data
         console.log(response)
