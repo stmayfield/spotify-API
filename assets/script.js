@@ -58,51 +58,49 @@ var testTrackList = [
 renderTrackList(testTrackList);
 
 getArtist();
-
-
+/*
 var authEndpoint = 'https://accounts.spotify.com/authorize?client_id=';
-var clientID = "87da17f3514b4a86854820f3d7804bb0"
-var redirectURI = "https:%2F%2Fstmayfield.github.io%2Fspotify-API%2F"
-var artist = /*$("#newItem").val()*/ "taylor swift";
-
-
-
-
+var artist = "taylor swift";
+var artistID = "06HL4z0CvFAxyc27GXpf02?si=DH8rk5BaQ0OkfcJpzSwebQ";
 
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
-authButton.click(function () {
-    window.location.href = authEndpoint + clientID + "&redirect_uri=" + redirectURI + '&response_type=token';
-})
 
-
+/*
 'https://accounts.spotify.com/authorize?client_id=87da17f3514b4a86854820f3d7804bb0&redirect_uri=https://stmayfield.github.io/spotify-API/&response_type=token'
 'https://accounts.spotify.com/authorize?client_id=5fe01282e94241328a84e7c5cc169164&redirect_uri=http:%2F%2Fexample.com%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123'
+*/
+/*
+function loginAuth(callback) {
+    var clientID = "87da17f3514b4a86854820f3d7804bb0";
+    var redirectURI = "https:%2F%2Fstmayfield.github.io%2Fspotify-API%2F";
+    var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
+    return authEndpoint + clientID + "&redirect_uri=" + redirectURI + '&response_type=token';
 
+}
 
-var queryURL = "https://api.spotify.com/v1/search/q=" + artist + "&type=artist"
-
+/*
 // Spotify API
-$.ajax({
-    url: queryURL,
-    method: "GET",
-    Accept: "application/json",
-    success: function (response) {
-        console.log(response)
-        iFrameW();
-    }
+function spotifyAPI(accessToken) {
+    return $.ajax({
+        url: queryURL,
+        method: "GET",
+        headers: { 'Authorization': 'Bearer ' + accessToken },
+    })
+}
+
+
+authButton.click(function () {
+    loginAuth(function (accessToken) {
+        spotifyAPI(accessToken)
+            .then(function (response) {
+                console.log(response)
+                iFrameW()
+            })
+    })
 })
 
 
 
-// Event Trigger for Spotify Auth
-
-
-
-
-
-// var URI = "6mswcNfl5UULnG5fvg5Fty?si=i2tgZLkeRQeZSAInNvm_ew"
-
-// Spotify Widget
 
 function iFrameW() {
     $("#widget").empty();
@@ -115,4 +113,68 @@ function iFrameW() {
         allow: "encrypted-media"
     })
     $("#widget").append(iFrameW)
-}
+};
+*/
+
+var queryURL = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks"
+var artistID = "06HL4z0CvFAxyc27GXpf02?si=DH8rk5BaQ0OkfcJpzSwebQ";
+
+
+(function () {
+
+    function login(callback) {
+        var clientID = "87da17f3514b4a86854820f3d7804bb0";
+        var redirectURI = "https:%2F%2Fstmayfield.github.io%2Fspotify-API%2F";
+        function getLoginURL(scopes) {
+            return 'https://accounts.spotify.com/authorize?client_id=' + clientID +
+                '&redirect_uri=' + encodeURIComponent(redirectURI) +
+                '&scope=' + encodeURIComponent(scopes.join(' ')) +
+                '&response_type=token';
+        }
+
+        var url = getLoginURL([
+            'user-read-email'
+        ]);
+
+        var width = 450,
+            height = 730,
+            left = (screen.width / 2) - (width / 2),
+            top = (screen.height / 2) - (height / 2);
+
+        window.addEventListener("message", function (event) {
+            var hash = JSON.parse(event.data);
+            if (hash.type == 'access_token') {
+                callback(hash.access_token);
+            }
+        }, false);
+
+        var w = window.open(url,
+            'Spotify',
+            'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
+        );
+
+    }
+
+    function getUserData(accessToken) {
+        return $.ajax({
+            url: queryURL,
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        });
+    }
+
+
+    authButton = $("#widget").append($("<button>").html("Allow Access"));
+
+    authButton.click(function () {
+        login(function (accessToken) {
+            getUserData(accessToken)
+                .then(function (response) {
+                    loginButton.style.display = 'none';
+                    resultsPlaceholder.innerHTML = template(response);
+                });
+        });
+    });
+
+})();
