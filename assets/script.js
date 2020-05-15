@@ -103,11 +103,8 @@ authButton.click(function () {
 })
 */
 
-
-
-function iFrameW() {
+function iFrameW(URI) {
     $("#widget").empty();
-    var URI = "6RRNNciQGZEXnqk8SQ9yv5"
     var iFrameW = $("<iframe>").attr({
         src: "https://open.spotify.com/embed/track/" + URI,
         width: "300",
@@ -118,68 +115,76 @@ function iFrameW() {
     })
     $("#widget").append(iFrameW)
 };
-iFrameW()
 
-
-
-// Get the hash of the url
-const hash = window.location.hash
-    .substring(1)
-    .split('&')
-    .reduce(function (initial, item) {
-        if (item) {
-            var parts = item.split('=');
-            initial[parts[0]] = decodeURIComponent(parts[1]);
-        }
-        return initial;
-    }, {});
-window.location.hash = '';
-
-// Set token
-let _token = hash.access_token;
-
-const authEndpoint = 'https://accounts.spotify.com/authorize';
-
-// Replace with your app's client ID, redirect URI and desired scopes
-const clientId = '87da17f3514b4a86854820f3d7804bb0';
-const redirectUri = 'https://stmayfield.github.io/spotify-API/';
-const scopes = [
-    'user-top-read'
-];
-
-// If there is no token, redirect to Spotify authorization
-if (!_token) {
-    window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
-}
-
-// var artistID = "06HL4z0CvFAxyc27GXpf02";
-var artist = "taylor swift";
-var queryURL = "https://api.spotify.com/v1/search?q=" + artist + "&type=artist";
-// var queryURL3 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks";
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
 
+authButton.click(function () {
 
 
+    // Get the hash of the url
+    const hash = window.location.hash
+        .substring(1)
+        .split('&')
+        .reduce(function (initial, item) {
+            if (item) {
+                var parts = item.split('=');
+                initial[parts[0]] = decodeURIComponent(parts[1]);
+            }
+            return initial;
+        }, {});
+    window.location.hash = '';
 
-// Make a call using the token
-$.ajax({
-    url: queryURL,
-    method: "GET",
-    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
-}).then(function (response) {
-    // Do something with the returned data
-    console.log(response)
-    var artistID = response.artists.items[0].id
-    var queryURL2 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks?country=US";
+    // Set token
+    let _token = hash.access_token;
+
+    const authEndpoint = 'https://accounts.spotify.com/authorize';
+
+    // Replace with your app's client ID, redirect URI and desired scopes
+    const clientId = '87da17f3514b4a86854820f3d7804bb0';
+    const redirectUri = 'https://stmayfield.github.io/spotify-API/';
+    const scopes = [
+        'user-top-read'
+    ];
+
+    // If there is no token, redirect to Spotify authorization
+    if (!_token) {
+        window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
+    }
+
+    // var artistID = "06HL4z0CvFAxyc27GXpf02";
+    var artist = "taylor swift";
+    var queryURL = "https://api.spotify.com/v1/search?q=" + artist + "&type=artist";
+    // var queryURL3 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks";
+
+    // Make a call using the token
     $.ajax({
-        url: queryURL2,
+        url: queryURL,
         method: "GET",
         beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
     }).then(function (response) {
         // Do something with the returned data
         console.log(response)
+        var artistID = response.artists.items[0].id
+        var queryURL2 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks?country=US";
+        $.ajax({
+            url: queryURL2,
+            method: "GET",
+            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+        }).then(function (response) {
+            // Do something with the returned data
+            console.log(response)
+            var songID = response.tracks[0].id
+            iFrameW(songID)
+        });
     });
-});
+
+})
+
+
+
+
+
+
 
 // Make a call using the token
 
