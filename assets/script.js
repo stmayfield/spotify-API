@@ -152,9 +152,8 @@ if (!_token) {
     window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
 }
 
-var artistID = "06HL4z0CvFAxyc27GXpf02";
+// var artistID = "06HL4z0CvFAxyc27GXpf02";
 var artist = "taylor swift";
-var queryURL2 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks?from_token";
 var queryURL = "https://api.spotify.com/v1/search?q=" + artist + "&type=artist";
 // var queryURL3 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks";
 var authButton = $("#widget").append($("<button>").html("Allow Access"));
@@ -170,17 +169,22 @@ $.ajax({
 }).then(function (response) {
     // Do something with the returned data
     console.log(response)
+    var artistID = response.artists.items[0].id
+    var queryURL2 = "https://api.spotify.com/v1/artists/" + artistID + "/top-tracks?country=US";
+    $.ajax({
+        url: queryURL2,
+        method: "GET",
+        beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+    }).then(function (response) {
+        // Do something with the returned data
+        console.log(response)
+    });
 });
 
 // Make a call using the token
-$.ajax({
-    url: queryURL2,
-    method: "GET",
-    beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
-}).then(function (response) {
-    // Do something with the returned data
-    console.log(response)
-});
+
+
+
 /*
 // Make a call using the token
 $.ajax({
