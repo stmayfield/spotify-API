@@ -129,21 +129,25 @@ function iFrameW(URI) {
   $("#widget").append(iFrameW)
 };
 
-function spotifyPull(artistResult) {
 
-  const hash = window.location.hash
-    .substring(1)
-    .split('&')
-    .reduce(function (initial, item) {
-      if (item) {
-        var parts = item.split('=');
-        initial[parts[0]] = decodeURIComponent(parts[1])
-      }
-      return initial;
-    }, {});
+
+
+const hash = window.location.hash
+  .substring(1)
+  .split('&')
+  .reduce(function (initial, item) {
+    if (item) {
+      var parts = item.split('=');
+      initial[parts[0]] = decodeURIComponent(parts[1])
+    }
+    return initial;
+  }, {});
+let _token = hash.access_token;
+
+
+function spotifyAuth() {
   window.location.hash = '';
 
-  let _token = hash.access_token;
   var authEndpoint = "https://accounts.spotify.com/authorize";
   var clientID = "87da17f3514b4a86854820f3d7804bb0";
   // Set URI to Live Site
@@ -155,6 +159,14 @@ function spotifyPull(artistResult) {
   if (!_token) {
     window.location = authEndpoint + "?client_id=" + clientID + "&redirect_uri=" + redirectURI + "&scope=" + scope.join("%20") + "&response_type=token&show_dialog=true";
   }
+}
+
+
+
+
+
+
+function spotifyPull(artistResult) {
 
   var queryURL = "https://api.spotify.com/v1/search?q=" + artistResult + "&type=artist";
 
