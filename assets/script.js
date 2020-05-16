@@ -17,13 +17,17 @@ $("#discover").on("click", function (event) {
   var artist = $("#newItem").val();
   getArtist(artist)
   $("#newItem").val("");
-  spotifyAuth()
-  spotifyPull(artist)
-
+  spotifyPull(artist);
 });
 
 //artist click
 $("body").on("click", ".artist", function (event) {
+  var artist = $(this).text();
+  getArtist(artist);
+});
+
+//sim-artist click
+$("body").on("click", ".sim-artist", function (event) {
   var artist = $(this).text();
   getArtist(artist);
 });
@@ -74,7 +78,7 @@ function getArtist(artist) {
       $("#artist-list").empty();
       for (let i = 0; i < response.Similar.Results.length; i++) {
         $("#artist-list").append(
-          "<li>" + response.Similar.Results[i].Name + "</li>"
+          "<li class = sim-artist>" + response.Similar.Results[i].Name + "</li>"
         );
       }
       addArtist(artist);
@@ -111,6 +115,7 @@ var testFavArtistList = [
 renderFavArtistList();
 
 
+// Spotify Widget
 function iFrameW(URI) {
   $("#widget").empty();
   var iFrameW = $("<iframe>").attr({
@@ -124,15 +129,8 @@ function iFrameW(URI) {
   $("#widget").append(iFrameW)
 };
 
+function spotifyPull(artistResult) {
 
-
-
-// Set Auth button to Discover button
-
-
-
-
-function spotifyAuth() {
   const hash = window.location.hash
     .substring(1)
     .split('&')
@@ -148,8 +146,8 @@ function spotifyAuth() {
   let _token = hash.access_token;
   var authEndpoint = "https://accounts.spotify.com/authorize";
   var clientID = "87da17f3514b4a86854820f3d7804bb0";
-  // Set new URI to Live Site
-  var redirectURI = "https://stmayfield.github.io/spotify-API/";
+  // Set URI to Live Site
+  var redirectURI = "https://gfhiebert.github.io/Music-Buffet/";
   var scope = [
     "user-top-read"
   ];
@@ -157,15 +155,7 @@ function spotifyAuth() {
   if (!_token) {
     window.location = authEndpoint + "?client_id=" + clientID + "&redirect_uri=" + redirectURI + "&scope=" + scope.join("%20") + "&response_type=token&show_dialog=true";
   }
-}
 
-
-
-function spotifyPull(artistResult) {
-
-
-  // Store recent search in localStorage
-  // var artistResult = $("#newItem").val().trim();
   var queryURL = "https://api.spotify.com/v1/search?q=" + artistResult + "&type=artist";
 
   $.ajax({
@@ -188,6 +178,3 @@ function spotifyPull(artistResult) {
   });
 
 }
-
-
-
