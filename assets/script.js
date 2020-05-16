@@ -16,7 +16,8 @@ $("#discover").on("click", function (event) {
   event.preventDefault();
   var artist = $("#newItem").val();
   getArtist(artist)
-  $("#newItem").val("");
+  $("#newItem").val("").trim();
+  spotifyPull(artist);
 });
 
 //artist click
@@ -126,7 +127,10 @@ function iFrameW(URI) {
 
 // Set Auth button to Discover button
 
-$("#discover").click(function () {
+
+function spotifyPull(artistResult) {
+
+
   const hash = window.location.hash
     .substring(1)
     .split('&')
@@ -154,7 +158,7 @@ $("#discover").click(function () {
 
 
   // Store recent search in localStorage
-  var artistResult = $("#newItem").val().trim();
+  // var artistResult = $("#newItem").val().trim();
   var queryURL = "https://api.spotify.com/v1/search?q=" + artistResult + "&type=artist";
 
   $.ajax({
@@ -176,8 +180,7 @@ $("#discover").click(function () {
     });
   });
 
-});
-
+}
 
 
 
