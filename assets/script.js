@@ -16,7 +16,7 @@ $("#discover").on("click", function (event) {
   event.preventDefault();
   var artist = $("#newItem").val();
   getArtist(artist)
-  $("#newItem").val("").trim();
+  $("#newItem").val("");
   spotifyPull(artist);
 });
 
