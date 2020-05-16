@@ -17,7 +17,9 @@ $("#discover").on("click", function (event) {
   var artist = $("#newItem").val();
   getArtist(artist)
   $("#newItem").val("");
+  spotifyAuth()
   spotifyPull(artist)
+
 });
 
 //artist click
@@ -128,9 +130,9 @@ function iFrameW(URI) {
 // Set Auth button to Discover button
 
 
-function spotifyPull(artistResult) {
 
 
+function spotifyAuth() {
   const hash = window.location.hash
     .substring(1)
     .split('&')
@@ -155,6 +157,11 @@ function spotifyPull(artistResult) {
   if (!_token) {
     window.location = authEndpoint + "?client_id=" + clientID + "&redirect_uri=" + redirectURI + "&scope=" + scope.join("%20") + "&response_type=token&show_dialog=true";
   }
+}
+
+
+
+function spotifyPull(artistResult) {
 
 
   // Store recent search in localStorage
