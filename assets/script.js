@@ -17,7 +17,7 @@ $("#discover").on("click", function (event) {
   var artist = $("#newItem").val();
   getArtist(artist)
   $("#newItem").val("");
-  spotifyPull(artist);
+  spotifyPull(artist)
 });
 
 //artist click
