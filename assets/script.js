@@ -125,8 +125,8 @@ function iFrameW(URI) {
 
 
 // Set Auth button to Discover button
-var authButton = $("#widget").append($("<button>").html("Allow Access"));
-authButton.click(function () {
+
+$("#discover").click(function () {
   const hash = window.location.hash
     .substring(1)
     .split('&')
